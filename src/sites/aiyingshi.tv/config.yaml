@@ -1,0 +1,11 @@
+name: 'MovieButAds > Aiyingshi'
+version: '0.3.0'
+namespace: 'https://aiyingshi.movie-but-ads.mutoo.im'
+icon: 'https://www.google.com/s2/favicons?domain=www.aiyingshi.tv'
+match:
+  - 'https://www.iyingshi5.tv/*'
+  - 'https://www.iyingshi6.tv/*'
+  - 'https://www.iyingshi7.tv/*'
+  - 'https://www.iyingshi8.tv/*'
+  - 'https://www.iyingshi9.tv/*'
+  - 'https://www.aiyingshi.tv/*'

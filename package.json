@@ -1,0 +1,36 @@
+{
+  "name": "movie-but-ads",
+  "version": "1.0.0",
+  "description": "improve watching experience on movie websites.",
+  "main": "src/index.js",
+  "type": "module",
+  "repository": "https://github.com/mutoo/movie-but-ads",
+  "author": "mutoo",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/core": "^7.25.7",
+    "@eslint/js": "^9.12.0",
+    "@rollup/plugin-alias": "^5.1.1",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^28.0.0",
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint": "^9.12.0",
+    "glob": "^11.0.0",
+    "globals": "^15.11.0",
+    "husky": "^9.1.6",
+    "js-yaml": "^4.1.0",
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.3.3",
+    "rollup": "^4.24.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "prepare": "husky",
+    "build": "node tools/build.js",
+    "format": "prettier --write .",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  }
+}
