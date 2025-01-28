@@ -1,0 +1,7 @@
+name: 'MovieButAds > Duboku'
+version: '0.5.0'
+namespace: 'https://duboku.movie-but-ads.mutoo.im'
+icon: 'https://www.google.com/s2/favicons?domain=www.duboku.tv'
+match:
+  - 'https://*.duboku.tv/*'
+  - 'https://*.duboku.fun/*'

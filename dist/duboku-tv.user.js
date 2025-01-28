@@ -1,22 +1,13 @@
 // ==UserScript==
-// @name         MovieButAds > Yifan
-// @namespace    https://yifan.movie-but-ads.mutoo.im
-// @version      0.1.1
+// @name         MovieButAds > Duboku
+// @namespace    https://duboku.movie-but-ads.mutoo.im
+// @version      0.5.0
 // @description  Movie But Ads is a collection of user scripts that enhance the viewing experience on Chinese movie websites. These scripts remove ads, improve functionality, and optimize the user interface for a smoother movie-watching experience.
 // @author       mutoo<gmutoo@gmail.com>
 // @license      MIT
-// @icon         https://www.google.com/s2/favicons?domain=www.yifan.tv
-// @match        https://www.yifan.tv/*
-// @match        https://www.yfsp.tv/*
-// @match        https://www.yfsp.me/*
-// @match        https://www.ayf.tv/*
-// @match        https://www.aiyifan.tv/*
-// @match        https://www.wyav.tv/*
-// @match        https://www.flyv.tv/*
-// @match        https://www.jssp.tv/*
-// @match        https://www.iyf.tv/*
-// @match        https://www.lgsp.tv/*
-// @match        https://www.hlive.io/*
+// @icon         https://www.google.com/s2/favicons?domain=www.duboku.tv
+// @match        https://*.duboku.tv/*
+// @match        https://*.duboku.fun/*
 // @run-at       document-start
 // @grant        none
 // ==/UserScript==
@@ -68,13 +59,13 @@ function ensureCondition(condition, maxAttempts = 600, failureMessage) {
 }
 
 /**
- * ensure an element is present
- * @param {string} selector
+ * ensure a global object is present
+ * @param {string} objectName
  * @param {number} maxAttempts
  * @returns {Promise<boolean>}
  */
-function ensureElement(selector, maxAttempts = 600) {
-  return ensureCondition(() => document.querySelector(selector), maxAttempts, `Cannot detect ${selector} after ${maxAttempts} attempts`);
+function ensureGlobalObject(objectName, maxAttempts = 600) {
+  return ensureCondition(() => window[objectName], maxAttempts, `Cannot detect ${objectName} after ${maxAttempts} attempts`);
 }class KeyboardShortcuts {
   constructor(videoController, options) {
     this.videoController = videoController;
@@ -259,135 +250,63 @@ function ensureElement(selector, maxAttempts = 600) {
   getDuration() {
     throw new Error('Not implemented');
   }
-}class YfanTvVideoController extends VideoControllerInterface {
-  constructor(vgAPI) {
+}class DubokuTvVideoController extends VideoControllerInterface {
+  constructor(player) {
     super();
-    this.api = vgAPI;
+    this.vjs = player;
   }
   getVideo() {
-    return null;
+    return this.vjs.$('video');
   }
   setPlaybackRate(rate) {
-    this.api.playbackRate = rate;
+    this.vjs.playbackRate(rate);
   }
   getPlaybackRate() {
-    return this.api.playbackRate;
+    return this.vjs.playbackRate();
   }
   isFullscreen() {
-    return this.api.fsAPI.isFullscreen;
+    return this.vjs.isFullscreen();
   }
   requestFullscreen() {
-    this.api.fsAPI.request();
+    this.vjs.requestFullscreen();
   }
   exitFullscreen() {
-    this.api.fsAPI.exit();
+    this.vjs.exitFullscreen();
   }
   requestPictureInPicture() {
-    // no-op
+    this.getVideo().requestPictureInPicture();
   }
   seek(time) {
-    this.api.currentTime = time;
+    this.vjs.currentTime(Math.max(0, Math.min(time, this.getDuration())));
   }
   getCurrentTime() {
-    return this.api.currentTime;
+    return this.vjs.currentTime();
   }
   getDuration() {
-    return this.api.duration;
+    return this.vjs.duration();
   }
-}function getDeps(element, target) {
-  for (const key in element) {
-    if (key.startsWith('__ngContext__')) {
-      const context = element[key];
-      for (const item of context) {
-        if (item && typeof item === 'object' && item[target]) {
-          return [item[target], item];
+}router.register(/^\/static\/player\//, () => {
+  ensureGlobalObject('player').then(player => {
+    // autoplay
+    player.autoplay(true);
+
+    // steal focus for iframe
+    window.focus();
+
+    // add the video controller and keyboard shortcuts
+    const videoController = new DubokuTvVideoController(player);
+    new KeyboardShortcuts(videoController, {
+      onKeyUp: e => {
+        if (e.key === ' ') {
+          if (player.paused()) {
+            player.play();
+          } else {
+            player.pause();
+          }
         }
       }
-    }
-  }
-  return null;
-}
-router.register(/^\/play/, () => {
-  Promise.all([ensureElement('#video_player'), ensureElement('aa-videoplayer'), ensureElement('vg-player')]).then(([videoElement, aaVideoPlayerElement, vgPlayerElement]) => {
-    // disable the ads on pause
-    window.addEventListener('invokePauseAds', e => {
-      console.log('invokePauseAds');
-      e.stopImmediatePropagation();
-    }, {
-      capture: true
     });
-    const [danmuFacade] = getDeps(aaVideoPlayerElement, 'danmuFacade');
-    if (danmuFacade) {
-      danmuFacade.isPaused = true;
-      danmuFacade.danmuListLoaded = d => {
-        console.log('danmuListLoaded', d);
-      };
-    } else {
-      console.warn('danmuFacade not found');
-    }
-    const [ads] = getDeps(aaVideoPlayerElement, 'api');
-    if (ads) {
-      // disable the ads
-      ads.triggerPlayAds = t => {
-        console.log('triggerPlayAds', t);
-      };
-    } else {
-      console.warn('ads api not found');
-    }
-    const [pgmp] = getDeps(aaVideoPlayerElement, 'pgmp');
-    if (pgmp) {
-      pgmp.dataList.length = 0;
-    } else {
-      console.warn('pgmp not found');
-    }
-    const [_, target] = getDeps(videoElement, 'onShowPauseAds');
-    if (target) {
-      // remove pause ads
-      target.list.length = 0;
-      target.onShowPauseAds = {
-        next: t => {
-          console.log('onShowPauseAds', t);
-        }
-      };
-    } else {
-      console.warn('onShowPauseAds not found');
-    }
-    const [vsAPI] = getDeps(vgPlayerElement, 'API');
-    if (vsAPI) {
-      const injected = vgPlayerElement.classList.contains('movie-but-ads-injected');
-      if (injected) {
-        console.warn('Already injected');
-        return;
-      }
-      const videoController = new YfanTvVideoController(vsAPI);
-      new KeyboardShortcuts(videoController);
-      // mark player elemen as injected
-      vgPlayerElement.classList.add('movie-but-ads-injected');
-      console.log('movie-but-ads', 'yfan.tv');
-    } else {
-      console.warn('vsAPI not found');
-    }
+    console.log('movie-but-ads', 'duboku.tv');
   });
 });
-ensureElement('router-outlet').then(el => {
-  const [ngRouter] = getDeps(el, 'router');
-  if (!ngRouter) {
-    console.error('router not found');
-    return;
-  } else {
-    let lastUrl = '';
-    ngRouter.events.subscribe(e => {
-      if (!e.urlAfterRedirects) {
-        // not a navigation event
-        return;
-      }
-      if (e.urlAfterRedirects === lastUrl) {
-        // ignore the repeated event
-        return;
-      }
-      console.log('router changed', e);
-      lastUrl = e.urlAfterRedirects;
-      router.handle(lastUrl);
-    });
-  }
-});})();
+router.handle();})();

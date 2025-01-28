@@ -1,10 +1,11 @@
 export class KeyboardShortcuts {
-  constructor(videoController) {
+  constructor(videoController, options) {
     this.videoController = videoController;
     this.skip = 10;
     this.audioContext = null;
     this.delayNode = null;
     this.delayNodeConnected = false;
+    this.keyUpDelegate = options?.onKeyUp ?? function () {};
     this.bindEvents();
   }
 
@@ -70,6 +71,9 @@ export class KeyboardShortcuts {
         break;
       case ']':
         this.increaseAudioDelay();
+        break;
+      default:
+        this.keyUpDelegate(e);
         break;
     }
   }

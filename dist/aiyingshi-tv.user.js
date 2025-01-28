@@ -71,12 +71,13 @@ function ensureCondition(condition, maxAttempts = 600, failureMessage) {
 function ensureGlobalObject(objectName, maxAttempts = 600) {
   return ensureCondition(() => window[objectName], maxAttempts, `Cannot detect ${objectName} after ${maxAttempts} attempts`);
 }class KeyboardShortcuts {
-  constructor(videoController) {
+  constructor(videoController, options) {
     this.videoController = videoController;
     this.skip = 10;
     this.audioContext = null;
     this.delayNode = null;
     this.delayNodeConnected = false;
+    this.keyUpDelegate = options?.onKeyUp ?? function () {};
     this.bindEvents();
   }
   bindEvents() {
@@ -135,6 +136,9 @@ function ensureGlobalObject(objectName, maxAttempts = 600) {
         break;
       case ']':
         this.increaseAudioDelay();
+        break;
+      default:
+        this.keyUpDelegate(e);
         break;
     }
   }
