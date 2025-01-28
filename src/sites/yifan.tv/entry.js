@@ -75,8 +75,17 @@ router.register(/^\/play/, () => {
 
     const [vsAPI] = getDeps(vgPlayerElement, 'API');
     if (vsAPI) {
+      const injected = vgPlayerElement.classList.contains(
+        'movie-but-ads-injected'
+      );
+      if (injected) {
+        console.warn('Already injected');
+        return;
+      }
       const videoController = new YfanTvVideoController(vsAPI);
       new KeyboardShortcuts(videoController);
+      // mark player elemen as injected
+      vgPlayerElement.classList.add('movie-but-ads-injected');
       console.log('movie-but-ads', 'yfan.tv');
     } else {
       console.warn('vsAPI not found');
@@ -84,4 +93,25 @@ router.register(/^\/play/, () => {
   });
 });
 
-router.handle();
+ensureElement('router-outlet').then((el) => {
+  const [ngRouter] = getDeps(el, 'router');
+  if (!ngRouter) {
+    console.error('router not found');
+    return;
+  } else {
+    let lastUrl = '';
+    ngRouter.events.subscribe((e) => {
+      if (!e.urlAfterRedirects) {
+        // not a navigation event
+        return;
+      }
+      if (e.urlAfterRedirects === lastUrl) {
+        // ignore the repeated event
+        return;
+      }
+      console.log('router changed', e);
+      lastUrl = e.urlAfterRedirects;
+      router.handle(lastUrl);
+    });
+  }
+});

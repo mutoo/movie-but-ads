@@ -2,7 +2,7 @@
 // @name         MovieButAds > Aiyingshi
 // @namespace    https://aiyingshi.movie-but-ads.mutoo.im
 // @version      0.3.0
-// @description  
+// @description  Movie But Ads is a collection of user scripts that enhance the viewing experience on Chinese movie websites. These scripts remove ads, improve functionality, and optimize the user interface for a smoother movie-watching experience.
 // @author       mutoo<gmutoo@gmail.com>
 // @license      MIT
 // @icon         https://www.google.com/s2/favicons?domain=www.aiyingshi.tv

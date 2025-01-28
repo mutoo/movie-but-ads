@@ -36,7 +36,7 @@ function generateBanner(config) {
 // @name         ${config.name || 'MovieButAds'}
 // @namespace    ${config.namespace || 'https://movie-but-ads.mutoo.im'}
 // @version      ${config.version || '1.0.0'}
-// @description  ${config.description || ''}
+// @description  ${config.description || 'Movie But Ads is a collection of user scripts that enhance the viewing experience on Chinese movie websites. These scripts remove ads, improve functionality, and optimize the user interface for a smoother movie-watching experience.'}
 // @author       ${config.author || 'mutoo<gmutoo@gmail.com>'}
 // @license      ${config.license || 'MIT'}
 // @icon         ${config.icon || ''}
