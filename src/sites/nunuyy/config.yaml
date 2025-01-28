@@ -1,0 +1,6 @@
+name: 'MovieButAds > Nunuyy'
+version: '0.2.0'
+namespace: 'https://nunuyy.movie-but-ads.mutoo.im'
+icon: 'https://www.google.com/s2/favicons?domain=www.nunuyy5.com'
+match:
+  - 'https://*.nunuyy5.com/*'

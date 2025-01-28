@@ -90,3 +90,50 @@ export class VideoControllerInterface {
     throw new Error('Not implemented');
   }
 }
+
+export class SimpleVideoController extends VideoControllerInterface {
+  constructor(video) {
+    super();
+    this.video = video;
+  }
+
+  getVideo() {
+    return this.video;
+  }
+
+  setPlaybackRate(rate) {
+    this.video.playbackRate = rate;
+  }
+
+  getPlaybackRate() {
+    return this.video.playbackRate;
+  }
+
+  isFullscreen() {
+    return !!document.fullscreenElement;
+  }
+
+  requestFullscreen() {
+    this.video.requestFullscreen();
+  }
+
+  exitFullscreen() {
+    document.exitFullscreen();
+  }
+
+  requestPictureInPicture() {
+    this.video.requestPictureInPicture();
+  }
+
+  seek(time) {
+    this.video.currentTime = Math.max(0, Math.min(time, this.getDuration()));
+  }
+
+  getCurrentTime() {
+    return this.video.currentTime;
+  }
+
+  getDuration() {
+    return this.video.duration;
+  }
+}
