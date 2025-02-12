@@ -1,5 +1,5 @@
 name: 'MovieButAds > Aiyingshi'
-version: '0.3.0'
+version: '0.3.1'
 namespace: 'https://aiyingshi.movie-but-ads.mutoo.im'
 icon: 'https://www.google.com/s2/favicons?domain=www.aiyingshi.tv'
 match:

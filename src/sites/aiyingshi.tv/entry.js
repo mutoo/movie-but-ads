@@ -1,5 +1,5 @@
 import { router } from '@/common/router';
-import { ensureGlobalObject } from '@/common/ensure';
+import { ensureElement, ensureGlobalObject, ensureKey } from '@/common/ensure';
 import { KeyboardShortcuts } from '@/common/shortcuts';
 import { AiyingshiTvVideoController } from './api';
 
@@ -10,7 +10,40 @@ router.register('/', () => {
 });
 
 router.register(/^\/play/, () => {
-  ensureGlobalObject('YZM').then((YZM) => {
+  Promise.race([ensureGlobalObject('YZM'), ensureElement('#videobox')]).then(
+    (result) => {
+      if (result instanceof HTMLElement) {
+        mobile(result);
+      } else {
+        desktop(result);
+      }
+    },
+    () => {
+      console.error('YZM/videobox not found');
+    }
+  );
+
+  function mobile(_) {
+    // bypass the ads
+    Object.defineProperty(window, 'defaultTime', {
+      value: -1,
+      writable: false,
+    });
+    // start the video
+    ensureKey(window, 'playFrame').then(
+      (playFrame) => {
+        // eslint-disable-next-line no-undef
+        $('#videobox').attr('src', playFrame);
+        // eslint-disable-next-line no-undef
+        $('#videobox').show();
+      },
+      () => {
+        console.error('playFrame not found');
+      }
+    );
+  }
+
+  function desktop(YZM) {
     // freeze the ads fields so that the ads can't be added
     Object.defineProperty(YZM, 'ads', {
       value: {
@@ -42,7 +75,7 @@ router.register(/^\/play/, () => {
     const videoController = new AiyingshiTvVideoController(YZM);
     new KeyboardShortcuts(videoController);
     console.log('movie-but-ads', 'aiyingshi.tv');
-  });
+  }
 });
 
 router.handle();

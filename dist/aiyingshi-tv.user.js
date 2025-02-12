@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MovieButAds > Aiyingshi
 // @namespace    https://aiyingshi.movie-but-ads.mutoo.im
-// @version      0.3.0
+// @version      0.3.1
 // @description  Movie But Ads is a collection of user scripts that enhance the viewing experience on Chinese movie websites. These scripts remove ads, improve functionality, and optimize the user interface for a smoother movie-watching experience.
 // @author       mutoo<gmutoo@gmail.com>
 // @license      MIT
@@ -70,6 +70,27 @@ function ensureCondition(condition, maxAttempts = 600, failureMessage) {
  */
 function ensureGlobalObject(objectName, maxAttempts = 600) {
   return ensureCondition(() => window[objectName], maxAttempts, `Cannot detect ${objectName} after ${maxAttempts} attempts`);
+}
+
+/**
+ * ensure an element is present
+ * @param {string} selector
+ * @param {number} maxAttempts
+ * @returns {Promise<boolean>}
+ */
+function ensureElement(selector, maxAttempts = 600) {
+  return ensureCondition(() => document.querySelector(selector), maxAttempts, `Cannot detect ${selector} after ${maxAttempts} attempts`);
+}
+
+/**
+ * ensure a key is present in an object
+ * @param {object} object
+ * @param {string} key
+ * @param {number} maxAttempts
+ * @returns {Promise<boolean>}
+ */
+function ensureKey(object, key, maxAttempts = 6000) {
+  return ensureCondition(() => object[key], maxAttempts, `Cannot detect ${key} after ${maxAttempts} attempts`);
 }class KeyboardShortcuts {
   constructor(videoController, options) {
     this.videoController = videoController;
@@ -295,7 +316,32 @@ function ensureGlobalObject(objectName, maxAttempts = 600) {
   });
 });
 router.register(/^\/play/, () => {
-  ensureGlobalObject('YZM').then(YZM => {
+  Promise.race([ensureGlobalObject('YZM'), ensureElement('#videobox')]).then(result => {
+    if (result instanceof HTMLElement) {
+      mobile();
+    } else {
+      desktop(result);
+    }
+  }, () => {
+    console.error('YZM/videobox not found');
+  });
+  function mobile(_) {
+    // bypass the ads
+    Object.defineProperty(window, 'defaultTime', {
+      value: -1,
+      writable: false
+    });
+    // start the video
+    ensureKey(window, 'playFrame').then(playFrame => {
+      // eslint-disable-next-line no-undef
+      $('#videobox').attr('src', playFrame);
+      // eslint-disable-next-line no-undef
+      $('#videobox').show();
+    }, () => {
+      console.error('playFrame not found');
+    });
+  }
+  function desktop(YZM) {
     // freeze the ads fields so that the ads can't be added
     Object.defineProperty(YZM, 'ads', {
       value: {
@@ -327,6 +373,6 @@ router.register(/^\/play/, () => {
     const videoController = new AiyingshiTvVideoController(YZM);
     new KeyboardShortcuts(videoController);
     console.log('movie-but-ads', 'aiyingshi.tv');
-  });
+  }
 });
 router.handle();})();
