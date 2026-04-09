@@ -56,6 +56,10 @@ router.register(/^\/play/, () => {
     const [pgmp] = getDeps(aaVideoPlayerElement, 'pgmp');
     if (pgmp) {
       pgmp.dataList.length = 0;
+      Object.defineProperty(pgmp, 'pointToshow', {
+        value: [],
+        writable: false,
+      });
     } else {
       console.warn('pgmp not found');
     }
@@ -67,6 +71,10 @@ router.register(/^\/play/, () => {
       target.onShowPauseAds = {
         next: (t) => {
           console.log('onShowPauseAds', t);
+          // the pause list will be reload when jump to next episode
+          // here we automatically clear it again
+          target.list.length = 0;
+          target.pauseImage = null;
         },
       };
     } else {
