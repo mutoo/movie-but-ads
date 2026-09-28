@@ -16,8 +16,8 @@ Designed for users seeking a cleaner, more streamlined movie-watching experience
 Here's a list of implemented shortcuts:
 
 - `1` to `5`: Set certain playback speed
-- `-`: Decrease playback speed by 0.25, minimum at 0
-- `+`: Increase playback speed by 0.25, maximum at 10
+- `-` / `_`: Decrease playback speed by 0.25, minimum at 0
+- `=` / `+`: Increase playback speed by 0.25, maximum at 10
 - `F`: Toggle fullscreen
 - `P`: Toggle picture-in-picture mode
 - `,`: Rewind by 10s

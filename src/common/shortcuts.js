@@ -40,9 +40,11 @@ export class KeyboardShortcuts {
         vc.setPlaybackRate(parseInt(e.key));
         break;
       case '-':
+      case '_':
         vc.decreasePlaybackRate();
         break;
       case '=':
+      case '+':
         vc.increasePlaybackRate();
         break;
       case 'f':

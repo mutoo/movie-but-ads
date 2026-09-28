@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MovieButAds > Yifan
 // @namespace    https://yifan.movie-but-ads.mutoo.im
-// @version      0.1.2
+// @version      0.1.3
 // @description  Movie But Ads is a collection of user scripts that enhance the viewing experience on Chinese movie websites. These scripts remove ads, improve functionality, and optimize the user interface for a smoother movie-watching experience.
 // @author       mutoo<gmutoo@gmail.com>
 // @license      MIT
@@ -110,9 +110,11 @@ function ensureElement(selector, maxAttempts = 600) {
         vc.setPlaybackRate(parseInt(e.key));
         break;
       case '-':
+      case '_':
         vc.decreasePlaybackRate();
         break;
       case '=':
+      case '+':
         vc.increasePlaybackRate();
         break;
       case 'f':
