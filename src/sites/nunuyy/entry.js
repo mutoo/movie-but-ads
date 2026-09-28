@@ -1,6 +1,7 @@
 import { router } from '@/common/router';
 import { ensureElement } from '@/common/ensure';
 import { KeyboardShortcuts } from '@/common/shortcuts';
+import { registerSearch } from '@/common/search';
 import { SimpleVideoController } from './api';
 
 router.register(/^\/vod\//, () => {
@@ -29,5 +30,7 @@ router.register(/^\/vod\//, () => {
     console.log('movie-but-ads', 'nunuyy');
   });
 });
+
+registerSearch((keyword) => `/vodsearch?q=${encodeURIComponent(keyword)}`);
 
 router.handle();

@@ -27,5 +27,10 @@ Here's a list of implemented shortcuts:
 - `C`: Enable Audio delay
 - `[`: Decrease audio delay by 0.1s
 - `]`: Increase audio delay by 0.1s
+- `Q`: Open a quick search box with search history
+  - `Tab` / `Shift+Tab` (or `↓` / `↑`): Move between the input and history items
+  - `Enter`: Search the input, or the selected history item
+  - `Delete` / `Backspace`: Remove the selected history item
+  - `Esc`: Close
 
 These shortcuts help you control video playback more conveniently, enhancing your viewing experience.

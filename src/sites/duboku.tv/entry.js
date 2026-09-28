@@ -1,6 +1,7 @@
 import { router } from '@/common/router';
 import { ensureGlobalObject } from '@/common/ensure';
 import { KeyboardShortcuts } from '@/common/shortcuts';
+import { registerSearch } from '@/common/search';
 import { DubokuTvVideoController } from './api';
 
 router.register(/^\/static\/player\//, () => {
@@ -28,5 +29,9 @@ router.register(/^\/static\/player\//, () => {
     console.log('movie-but-ads', 'duboku.tv');
   });
 });
+
+registerSearch(
+  (keyword) => `/vodsearch/-------------.html?wd=${encodeURIComponent(keyword)}`
+);
 
 router.handle();

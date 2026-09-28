@@ -1,6 +1,7 @@
 import { router } from '@/common/router';
 import { ensureElement, ensureGlobalObject, ensureKey } from '@/common/ensure';
 import { KeyboardShortcuts } from '@/common/shortcuts';
+import { registerSearch } from '@/common/search';
 import { AiyingshiTvVideoController } from './api';
 
 router.register('/', () => {
@@ -77,5 +78,10 @@ router.register(/^\/play/, () => {
     console.log('movie-but-ads', 'aiyingshi.tv');
   }
 });
+
+registerSearch(
+  (keyword) =>
+    `/index.php?s=vod-search-wd-${encodeURIComponent(keyword)}-cid--area--year--order-.html`
+);
 
 router.handle();

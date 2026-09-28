@@ -1,6 +1,7 @@
 import { router } from '@/common/router';
 import { ensureElement } from '@/common/ensure';
 import { KeyboardShortcuts } from '@/common/shortcuts';
+import { registerSearch } from '@/common/search';
 import { YfanTvVideoController } from './api';
 
 function getDeps(element, target) {
@@ -100,6 +101,8 @@ router.register(/^\/play/, () => {
     }
   });
 });
+
+registerSearch((keyword) => `/search/${encodeURIComponent(keyword)}`);
 
 ensureElement('router-outlet').then((el) => {
   const [ngRouter] = getDeps(el, 'router');
