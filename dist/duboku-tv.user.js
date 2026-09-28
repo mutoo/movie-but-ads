@@ -1,13 +1,14 @@
 // ==UserScript==
 // @name         MovieButAds > Duboku
 // @namespace    https://duboku.movie-but-ads.mutoo.im
-// @version      0.6.0
+// @version      0.6.1
 // @description  Movie But Ads is a collection of user scripts that enhance the viewing experience on Chinese movie websites. These scripts remove ads, improve functionality, and optimize the user interface for a smoother movie-watching experience.
 // @author       mutoo<gmutoo@gmail.com>
 // @license      MIT
 // @icon         https://www.google.com/s2/favicons?domain=www.duboku.tv
 // @match        https://*.duboku.tv/*
 // @match        https://*.duboku.fun/*
+// @match        https://*.dbku.tv/*
 // @run-at       document-start
 // @grant        none
 // ==/UserScript==
