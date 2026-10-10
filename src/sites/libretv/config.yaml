@@ -1,0 +1,7 @@
+name: 'MovieButAds > LibreTV'
+version: '0.1.0'
+namespace: 'https://libretv.movie-but-ads.mutoo.im'
+description: 'Playback speed and seek shortcuts for your LibreTV instance.'
+# Replace this reserved domain with your own LibreTV URL before building.
+match:
+  - 'https://libretv.example.invalid/*'

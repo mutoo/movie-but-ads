@@ -11,6 +11,29 @@ Designed for users seeking a cleaner, more streamlined movie-watching experience
 
 ## Usage
 
+### LibreTV
+
+The LibreTV adapter builds to `dist/libretv.user.js`. Replace the placeholder
+`match` in `src/sites/libretv/config.yaml` with your own URL, for example
+`https://your-domain:8443/*` or `http://localhost:18080/*`, run `yarn build`, and
+install the result in Tampermonkey / Violentmonkey. The placeholder does not match
+a real site. Install it separately in each browser, including the TV browser.
+
+This adapter supports speed keys `1`–`5`, `-` / `_`, `=` / `+`, seek keys
+`,` / `.` / `<` / `>`, and picture-in-picture with `P` (without Shift). The minimum
+speed is 0.25. Space, arrow keys, and `F` remain handled by LibreTV to avoid double
+actions. Inputs, editable regions, buttons, sliders, and Ctrl / Command / Alt
+combinations are excluded. Shared audio delay and quick search are not enabled
+for this adapter.
+
+The adapter uses the standard `<video>` API inside an ArtPlayer container and
+resolves the current video on every keypress, so episode changes, source changes,
+and SPA navigation do not need reinjection. Routine LibreTV updates do not
+require rebuilding or reinstalling the script. Verify the adapter if upstream
+changes its player container or keyboard bindings. For userscript updates,
+rebuild and reinstall while retaining your `match` in `config.yaml`; installing
+the repository's default build restores the placeholder.
+
 ## Shortcuts
 
 Here's a list of implemented shortcuts:
