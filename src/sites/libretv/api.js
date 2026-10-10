@@ -1,5 +1,7 @@
 import { SimpleVideoController } from '@/common/video-controller';
 
+export const VIDEO_SELECTOR = '.art-video-player video.art-video';
+
 export class LibreTVVideoController extends SimpleVideoController {
   constructor() {
     super(null);
@@ -7,7 +9,7 @@ export class LibreTVVideoController extends SimpleVideoController {
 
   getVideo() {
     // Resolve the current player on every keypress, including SPA navigation.
-    const videos = [...document.querySelectorAll('.artplayer-app video')];
+    const videos = [...document.querySelectorAll(VIDEO_SELECTOR)];
     return videos.find((video) => video.getClientRects().length > 0) ?? null;
   }
 

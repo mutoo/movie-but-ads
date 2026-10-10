@@ -26,9 +26,12 @@ actions. Inputs, editable regions, buttons, sliders, and Ctrl / Command / Alt
 combinations are excluded. Shared audio delay and quick search are not enabled
 for this adapter.
 
-The adapter uses the standard `<video>` API inside an ArtPlayer container and
-resolves the current video on every keypress, so episode changes, source changes,
-and SPA navigation do not need reinjection. Routine LibreTV updates do not
+The adapter activates only on `/watch`, using `.art-video-player video.art-video`
+and the standard video API. It waits for the player on entry, removes its keyboard
+listener on exit, and tracks SPA pushState, replaceState, and back/forward navigation.
+It resolves the current video on every keypress, so episode and source changes
+do not need reinjection. Home, live, and other routes have no enhanced shortcuts.
+Routine LibreTV updates do not
 require rebuilding or reinstalling the script. Verify the adapter if upstream
 changes its player container or keyboard bindings. For userscript updates,
 rebuild and reinstall while retaining your `match` in `config.yaml`; installing
